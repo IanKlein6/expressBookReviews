@@ -29,14 +29,23 @@ public_users.get('/books', function (req, res) {
   
 });
 
-//Get books via promises
-public_users.get('/books',function (req, res) {
-  const get_books = new Promise((resolve, reject) => {
-      resolve(res.send(JSON.stringify({books}, null, 4)));
+//Get books via async
+public_users.get('/books', async function (req, res) {
+  try {
+    const get_books = new Promise((resolve, reject) => {
+      // Assuming you want to send the entire books object as the response
+      resolve(res.send(JSON.stringify(books, null, 4)));
     });
 
-    get_books.then(() => console.log("Promise resolved"));
+    await get_books; // Wait for the promise to resolve
+    console.log("Promise resolved");
+  } catch (error) {
+    console.error("Error occurred:", error);
+    res.status(500).send("Something went wrong");
+  }
 });
+
+module.exports = public_users;
 
 // Get book details based on ISBN
 public_users.get('/isbn/:isbn', function (req, res) {
